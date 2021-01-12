@@ -41,5 +41,18 @@ public class IndexAction {
 	public List<Tag> queryAllTag(){
 		return tm.selectAll();
 	}
+	
+	@RequestMapping("queryFavoriteByTid.do")
+	public Tag queryFavoriteByTid(int tid){
+		return tm.selectByTid(tid);
+	}
 
+	/**
+	 *  查询没有tag的favorite
+	 *  @return
+	 */
+	@RequestMapping("queryNotTag.do")
+	public List<Favorite>queryNotTag(){
+		return null;
+	}
 }

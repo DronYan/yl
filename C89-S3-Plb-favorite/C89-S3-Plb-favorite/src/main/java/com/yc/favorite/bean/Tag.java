@@ -1,6 +1,7 @@
 package com.yc.favorite.bean;
 
 import java.io.Serializable;
+import java.util.List;
 
 import lombok.Data;
 
@@ -11,6 +12,14 @@ public class Tag implements Serializable{
 	private Integer tid;
 	private String tname;
 	private Long tcount;
+	private List<Favorite> favorites;
+	
+	public List<Favorite> getFavorites() {
+		return favorites;
+	}
+	public void setFavorites(List<Favorite> favorites) {
+		this.favorites = favorites;
+	}
 	public Integer getTid() {
 		return tid;
 	}

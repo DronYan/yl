@@ -26,7 +26,12 @@ public class FavoriteBiz {
 	
 	public void addFavorite(Favorite f) {
 		fm.insert(f);
-		String [] tags = f.getFtags().split("[，,:：；;]");
+		String[]tags=null;
+		if(f.getFtags()==null||f.getFtags().trim().isEmpty()) {
+			tags = new String[0];
+		} else {
+			tags = f.getFtags().split("[，,:：；;]");
+		}
 		//System.out.println(items.length);
 		for(String tag : tags) {
 			Tag t = new Tag();
