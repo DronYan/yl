@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<!-- namespace 命名空间  XML 关联接口, 必须保证 xml的命名空间==接口的完全限定名  -->
+<mapper namespace="com.yc.mybatis.dao.SchoolMapper">
+	<!-- 如果 标签内只有一个参数, 单参数场景, 参数名没有任何的要求,只要命名合法 -->
+	<select id="selectById" resultType="com.yc.mybatis.bean.JsjSchool">
+		select * from jsj_school WHERE id = #{iiiiiiiiiiiiiiiid}
+	</select>
+
+	<select id="selectByObj" resultType="com.yc.mybatis.bean.JsjSchool">
+		select * from jsj_school 
+		<!-- where 用于生成 WHERE 关键字, 
+			1. 如果没有sql条件, 不生成 WHERE
+			2. 会根据当前的条件, 决定是否要保留条件中的 and 和 or 
+			1=1 的写法有可能会降低执行效率, sql执行计划
+		-->
+		<where>
+			<!-- test内是一个简单逻辑表达式 , 判断字段的值是否满足条件 -->
+			<if test="id != null">
+				and id = #{id}
+			</if>
+			<if test="name != null">
+				and name like concat('%', #{name}, '%') 
+			</if>
+			<if test="province != null">
+				and province = #{province}
+			</if>
+		</where>
+	</select>
+	
+	<update id="update">
+		update jsj_school
+		<set>
+			<if test="name != null">
+				name = #{name} , 
+			</if>
+			<if test="province != null">
+				province = #{province} , 
+			</if>
+		</set>
+		where id= #{id}
+		<!-- 
+			JsjSchool s = new JsjSchool();
+			s.setId(1);
+			s.setName("清华");
+			mapper.udpate(s);
+			
+			if  +  set
+		 -->
+	</update>
+	
+	<select id="selectByNameAndFlag" resultType="com.yc.mybatis.bean.JsjSchool">
+		select * from jsj_school
+		<where>
+			<choose>
+				<when test=" flag == 1 ">
+					name = #{name}
+				</when>			
+				<when test=" flag == 2 ">
+					name like concat('%', #{name} , '%')
+				</when>	
+				<when test=" flag == 3 ">
+					name is null
+				</when>	
+				<otherwise>
+					name is not null				
+				</otherwise>
+			</choose>
+		</where>
+	</select>
+	
+	<select id="selectInNames" resultType="com.yc.mybatis.bean.JsjSchool">
+		select * from jsj_school
+		<where>
+			<!-- name in (?,?,?,?) -->
+			<foreach collection="names" item="name" open="name in (" close=")" separator=",">
+				#{name}
+			</foreach>
+		</where>
+		<!-- ${} 构建sql语句   #{}查询参数  ==> 导致注入攻击  -->
+		order by ${orderby}
+	</select>
+	
+	<!-- 缓存属性都有默认值 -->
+	<cache />
+	
+	
+	
+</mapper>
